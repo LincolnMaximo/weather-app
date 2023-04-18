@@ -3,6 +3,7 @@ const express = require('express')
 const hbs = require('hbs')
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
+const cors = require('cors')
 
 const app = express()
 
@@ -10,6 +11,13 @@ app.set('view engine', 'hbs')
 app.use(express.static(path.join(__dirname,'../public')))
 app.set('views',path.join(__dirname,'../templates/views'))
 hbs.registerPartials(path.join(__dirname,'../templates/partials'))
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*")
+    res.header("Access-Control-Allow-Methods", 'GET, POST, PUT, DELETE')
+    app.use(cors())
+    next() 
+})
 
 app.get('', (req, res) => {
     res.render('index', {
